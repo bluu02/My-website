@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayLearn — Classroom Game Ideas</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --yellow: #FFD93D;
+    --yellow-dark: #E6B800;
+    --coral: #FF6B6B;
+    --coral-dark: #CC4444;
+    --teal: #4ECDC4;
+    --teal-dark: #2BA89E;
+    --purple: #A78BFA;
+    --purple-dark: #7C3AED;
+    --green: #6BCB77;
+    --green-dark: #3A9944;
+    --bg: #FFFDF4;
+    --card-bg: #FFFFFF;
+    --text: #2D2D2D;
+    --text-muted: #6B6B6B;
+    --border: #E8E0D0;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --radius: 18px;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--yellow);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--yellow-dark);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .logo span { font-size: 1.8rem; }
+  .header-tagline {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #5A4A00;
+    text-align: right;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #FFF3B0 0%, #FFE0E0 50%, #D4F1F0 100%);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    border-bottom: 3px dashed var(--border);
+  }
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.8rem;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto 1.8rem;
+    font-weight: 600;
+  }
+
+  /* AGE TABS */
+  .age-tabs {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .age-tab {
+    padding: 0.7rem 1.8rem;
+    border-radius: 50px;
+    border: 3px solid transparent;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    border-color: var(--border);
+    color: var(--text-muted);
+  }
+  .age-tab.active-toddler {
+    background: var(--coral);
+    border-color: var(--coral-dark);
+    color: white;
+    transform: scale(1.05);
+  }
+  .age-tab.active-elementary {
+    background: var(--teal);
+    border-color: var(--teal-dark);
+    color: white;
+    transform: scale(1.05);
+  }
+  .age-tab:hover:not(.active-toddler):not(.active-elementary) {
+    border-color: var(--yellow-dark);
+    transform: scale(1.03);
+  }
+
+  /* GENERATE FORM */
+  .generate-section {
+    max-width: 680px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  .generate-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 3px solid var(--yellow);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .generate-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+  .form-row.full { grid-template-columns: 1fr; }
+  .form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+  }
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group select:focus,
+  .form-group input:focus { border-color: var(--yellow-dark); }
+  .btn-generate {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--yellow);
+    border: 3px solid var(--yellow-dark);
+    border-radius: 12px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+  .btn-generate:hover { background: var(--yellow-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .btn-generate:active { transform: translateY(0); }
+  .btn-generate:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* RESULT AREA */
+  .result-area {
+    max-width: 680px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+  }
+  .game-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 3px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    animation: slideIn 0.4s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .game-card-header {
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .game-card-header.toddler { background: linear-gradient(135deg, #FFEBEB, #FFF0B0); border-bottom: 3px solid #FFD0D0; }
+  .game-card-header.elementary { background: linear-gradient(135deg, #E0F7F5, #EBF5FF); border-bottom: 3px solid #B0E8E5; }
+  .game-title { font-family: 'Fredoka One', cursive; font-size: 1.6rem; color: var(--text); }
+  .game-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .badge {
+    padding: 0.25rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge-age { background: var(--coral); color: white; }
+  .badge-age.elementary { background: var(--teal); }
+  .badge-subject { background: var(--purple); color: white; }
+  .badge-time { background: var(--green); color: white; }
+  .badge-group { background: var(--yellow); color: #5A4A00; }
+  .game-emoji { font-size: 2.5rem; flex-shrink: 0; }
+
+  .game-card-body { padding: 1.5rem; }
+  .section-block { margin-bottom: 1.4rem; }
+  .section-block:last-child { margin-bottom: 0; }
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .section-label .dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .dot-coral { background: var(--coral); }
+  .dot-teal { background: var(--teal); }
+  .dot-yellow { background: var(--yellow-dark); }
+  .dot-purple { background: var(--purple); }
+  .dot-green { background: var(--green); }
+
+  .description { font-size: 1rem; line-height: 1.6; color: var(--text); }
+
+  .materials-list {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .material-tag {
+    background: #FFF8E0;
+    border: 2px solid var(--yellow);
+    border-radius: 50px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #5A4A00;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .material-tag::before { content: "✏️"; font-size: 0.75rem; }
+
+  .steps-list { list-style: none; }
+  .step-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px dashed var(--border);
+    align-items: flex-start;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .step-num.toddler { background: var(--coral); color: white; }
+  .step-num.elementary { background: var(--teal); color: white; }
+  .step-text { font-size: 0.95rem; line-height: 1.5; color: var(--text); padding-top: 3px; }
+
+  .tip-box {
+    background: #F0FFF4;
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .tip-box strong { color: var(--green-dark); }
+
+  /* LOADING */
+  .loading-box {
+    background: white;
+    border-radius: var(--radius);
+    border: 3px dashed var(--yellow);
+    padding: 3rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .loading-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 1rem; }
+  .loading-dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+    animation: bounce 1s infinite;
+  }
+  .loading-dots span:nth-child(1) { background: var(--coral); animation-delay: 0s; }
+  .loading-dots span:nth-child(2) { background: var(--yellow-dark); animation-delay: 0.15s; }
+  .loading-dots span:nth-child(3) { background: var(--teal); animation-delay: 0.3s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+  }
+  .loading-text { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: var(--text-muted); }
+
+  /* SAVED GAMES */
+  .saved-section {
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    padding: 0 1rem;
+  }
+  .saved-section h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .saved-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.8rem; }
+  .saved-mini-card {
+    background: white;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .saved-mini-card:hover { border-color: var(--yellow-dark); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .saved-mini-title { font-family: 'Fredoka One', cursive; font-size: 1rem; margin-bottom: 0.3rem; }
+  .saved-mini-meta { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+
+  .btn-save {
+    background: var(--teal);
+    border: 3px solid var(--teal-dark);
+    border-radius: 10px;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .btn-save:hover { background: var(--teal-dark); }
+  .btn-save.saved { background: var(--green); border-color: var(--green-dark); }
+
+  .divider {
+    border: none;
+    border-top: 3px dashed var(--border);
+    margin: 2rem auto;
+    max-width: 680px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 500px) {
+    .hero h1 { font-size: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .game-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo"><span>🎲</span> PlayLearn</div>
+  <div class="header-tagline">Classroom Games<br>Made Easy</div>
+</header>
+
+<section class="hero">
+  <h1>Find the Perfect<br>Classroom Game! 🎉</h1>
+  <p>Generate fun, unique game ideas for your students — with simple materials you already have!</p>
+
+  <div class="age-tabs">
+    <button class="age-tab active-toddler" onclick="setAge('toddler', this)" id="tab-toddler">
+      🍼 Ages 1–3
+    </button>
+    <button class="age-tab" onclick="setAge('elementary', this)" id="tab-elementary">
+      📚 Elementary
+    </button>
+  </div>
+</section>
+
+<section class="generate-section">
+  <div class="generate-card">
+    <h2>✨ Generate a Game Idea</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Subject / Theme</label>
+        <select id="subject">
+          <option value="any">Any / Surprise me!</option>
+          <option value="colors and shapes">Colors & Shapes</option>
+          <option value="numbers and counting">Numbers & Counting</option>
+          <option value="letters and reading">Letters & Reading</option>
+          <option value="science and nature">Science & Nature</option>
+          <option value="social skills">Social Skills</option>
+          <option value="movement and gross motor">Movement & Gross Motor</option>
+          <option value="music and rhythm">Music & Rhythm</option>
+          <option value="vocabulary and language">Vocabulary & Language</option>
+          <option value="art and creativity">Art & Creativity</option>
+          <option value="memory and focus">Memory & Focus</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Group Size</label>
+        <select id="groupsize">
+          <option value="any group size">Any</option>
+          <option value="individual (1 child)">Individual</option>
+          <option value="pairs (2 children)">Pairs</option>
+          <option value="small group (3–6 children)">Small Group</option>
+          <option value="whole class (10+ children)">Whole Class</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Time Available</label>
+        <select id="duration">
+          <option value="any duration">Any</option>
+          <option value="5 minutes">5 minutes</option>
+          <option value="10 minutes">10 minutes</option>
+          <option value="15–20 minutes">15–20 minutes</option>
+          <option value="30+ minutes">30+ minutes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Special Request (optional)</label>
+        <input type="text" id="special" placeholder="e.g. outdoor, quiet, active...">
+      </div>
+    </div>
+    <button class="btn-generate" onclick="generateGame()" id="gen-btn">
+      🎲 Generate Game Idea!
+    </button>
+  </div>
+</section>
+
+<section class="result-area" id="result-area"></section>
+
+<hr class="divider">
+
+<section class="saved-section">
+  <h2>📌 Saved Game Ideas</h2>
+  <div class="saved-grid" id="saved-grid">
+    <div class="empty-state">No saved games yet — generate one and save it!</div>
+  </div>
+</section>
+
+<script>
+let currentAge = 'toddler';
+let savedGames = JSON.parse(localStorage.getItem('playlearn_saved') || '[]');
+let currentGame = null;
+
+function setAge(age, btn) {
+  currentAge = age;
+  document.querySelectorAll('.age-tab').forEach(t => {
+    t.className = 'age-tab';
+  });
+  btn.className = `age-tab active-${age}`;
+}
+
+function showLoading() {
+  document.getElementById('result-area').innerHTML = `
+    <div class="loading-box">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <div class="loading-text">Cooking up a fun game idea... 🎨</div>
+    </div>`;
+}
+
+async function generateGame() {
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  showLoading();
+
+  const subject = document.getElementById('subject').value;
+  const groupsize = document.getElementById('groupsize').value;
+  const duration = document.getElementById('duration').value;
+  const special = document.getElementById('special').value;
+
+  const ageLabel = currentAge === 'toddler' ? 'toddlers aged 1–3 years old' : 'elementary school students (ages 6–12)';
+
+  const prompt = `You are a creative and experienced teacher. Generate ONE fun, unique, easy-to-understand classroom game for ${ageLabel}.
+
+Requirements:
+- Subject/Theme: ${subject}
+- Group size: ${groupsize}
+- Time: ${duration}
+- Special notes: ${special || 'none'}
+- Materials must be things easily found in a classroom (paper, pencils, chairs, tape, chalk, etc.)
+- Instructions must be direct, clear, and concise
+- The game must be genuinely fun and engaging
+
+Respond ONLY with a valid JSON object (no markdown, no backticks):
+{
+  "title": "Game Title",
+  "emoji": "one relevant emoji",
+  "subject": "subject/theme label",
+  "duration": "e.g. 10 min",
+  "group": "e.g. Whole class",
+  "description": "2-sentence fun description of the game",
+  "materials": ["item1", "item2", "item3"],
+  "steps": ["Step 1 text", "Step 2 text", "Step 3 text", "Step 4 text", "Step 5 text"],
+  "tip": "One teacher tip for making this game even more fun or inclusive"
+}`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content.map(i => i.text || '').join('').trim().replace(/```json|```/g, '').trim();
+    const game = JSON.parse(text);
+    currentGame = { ...game, age: currentAge };
+    renderGame(game);
+  } catch (e) {
+    document.getElementById('result-area').innerHTML = `<div class="loading-box"><div class="loading-text">😅 Something went wrong. Please try again!</div></div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderGame(game) {
+  const age = currentAge;
+  const stepClass = age === 'toddler' ? 'toddler' : 'elementary';
+  const headerClass = age === 'toddler' ? 'toddler' : 'elementary';
+  const ageLabel = age === 'toddler' ? 'Ages 1–3' : 'Elementary';
+
+  const materials = game.materials.map(m => `<span class="material-tag">${m}</span>`).join('');
+  const steps = game.steps.map((s, i) => `
+    <li class="step-item">
+      <div class="step-num ${stepClass}">${i + 1}</div>
+      <div class="step-text">${s}</div>
+    </li>`).join('');
+
+  document.getElementById('result-area').innerHTML = `
+    <div class="game-card">
+      <div class="game-card-header ${headerClass}">
+        <div>
+          <div class="game-title">${game.title}</div>
+          <div class="game-badges">
+            <span class="badge badge-age ${age === 'elementary' ? 'elementary' : ''}">${ageLabel}</span>
+            <span class="badge badge-subject">${game.subject}</span>
+            <span class="badge badge-time">⏱ ${game.duration}</span>
+            <span class="badge badge-group">👥 ${game.group}</span>
+          </div>
+        </div>
+        <div class="game-emoji">${game.emoji}</div>
+      </div>
+      <div class="game-card-body">
+        <div class="section-block">
+          <div class="section-label"><span class="dot dot-teal"></span> What's the Game?</div>
+          <p class="description">${game.description}</p>
+        </div>
+        <div class="section-block">
+          <div class="section-label"><span class="dot dot-yellow"></span> Materials Needed</div>
+          <div class="materials-list">${materials}</div>
+        </div>
+        <div class="section-block">
+          <div class="section-label"><span class="dot dot-coral"></span> Step-by-Step Instructions</div>
+          <ol class="steps-list">${steps}</ol>
+        </div>
+        <div class="section-block">
+          <div class="section-label"><span class="dot dot-green"></span> Teacher Tip</div>
+          <div class="tip-box"><strong>💡 Tip:</strong> ${game.tip}</div>
+        </div>
+        <button class="btn-save" onclick="saveGame()" id="save-btn">📌 Save this Game</button>
+      </div>
+    </div>`;
+}
+
+function saveGame() {
+  if (!currentGame) return;
+  const btn = document.getElementById('save-btn');
+  savedGames.unshift(currentGame);
+  if (savedGames.length > 20) savedGames = savedGames.slice(0, 20);
+  localStorage.setItem('playlearn_saved', JSON.stringify(savedGames));
+  btn.textContent = '✅ Saved!';
+  btn.className = 'btn-save saved';
+  renderSaved();
+}
+
+function renderSaved() {
+  const grid = document.getElementById('saved-grid');
+  if (savedGames.length === 0) {
+    grid.innerHTML = '<div class="empty-state">No saved games yet — generate one and save it!</div>';
+    return;
+  }
+  grid.innerHTML = savedGames.map((g, i) => `
+    <div class="saved-mini-card" onclick="viewSaved(${i})">
+      <div class="saved-mini-title">${g.emoji} ${g.title}</div>
+      <div class="saved-mini-meta">${g.age === 'toddler' ? '🍼 Ages 1–3' : '📚 Elementary'} · ${g.subject} · ${g.duration}</div>
+    </div>`).join('');
+}
+
+function viewSaved(i) {
+  const game = savedGames[i];
+  currentAge = game.age;
+  currentGame = game;
+  document.querySelectorAll('.age-tab').forEach(t => t.className = 'age-tab');
+  document.getElementById(`tab-${game.age}`).className = `age-tab active-${game.age}`;
+  renderGame(game);
+  document.querySelector('.result-area').scrollIntoView({ behavior: 'smooth' });
+}
+
+renderSaved();
+</script>
+</body>
+</html>
