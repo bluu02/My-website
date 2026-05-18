@@ -347,6 +347,86 @@
     .form-row { grid-template-columns: 1fr; }
     .game-title { font-size: 1.3rem; }
   }
+
+
+  .teacher-create-section {
+    max-width: 680px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .teacher-create-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 3px solid var(--teal);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .teacher-create-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .teacher-create-card p {
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .form-group textarea {
+    width: 100%;
+    min-height: 90px;
+    resize: vertical;
+    padding: 0.65rem 0.9rem;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: var(--bg);
+    outline: none;
+  }
+
+  .form-group textarea:focus { border-color: var(--teal-dark); }
+
+  .btn-create {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--teal);
+    border: 3px solid var(--teal-dark);
+    border-radius: 12px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    color: white;
+    cursor: pointer;
+    margin-top: 0.8rem;
+  }
+
+  .share-box {
+    background: #F7F4FF;
+    border: 2px solid var(--purple);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    margin-top: 1rem;
+    line-height: 1.5;
+    font-weight: 700;
+  }
+
+  .btn-share {
+    background: var(--purple);
+    border: 3px solid #7C3AED;
+    color: white;
+    border-radius: 10px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+  }
 </style>
 </head>
 <body>
@@ -358,7 +438,7 @@
 
 <section class="hero">
   <h1>Find the Perfect<br>Classroom Game! 🎉</h1>
-  <p>Generate fun classroom game ideas for your students — no API key, no backend, no paid AI needed.</p>
+  <p>Generate fun classroom game ideas for your students — .</p>
 
   <div class="age-tabs">
     <button class="age-tab active-toddler" onclick="setAge('toddler', this)" id="tab-toddler">🍼 Ages 1–3</button>
@@ -418,6 +498,72 @@
 </section>
 
 <section class="result-area" id="result-area"></section>
+
+<section class="teacher-create-section">
+  <div class="teacher-create-card">
+    <h2>👩‍🏫 Create Your Own Game Idea</h2>
+    <p>Teachers can add their own classroom game idea, save it, and copy a shareable message for other teachers.</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Game Title</label>
+        <input type="text" id="custom-title" placeholder="e.g. Shape Jump Challenge">
+      </div>
+      <div class="form-group">
+        <label>Emoji</label>
+        <input type="text" id="custom-emoji" placeholder="🎯" maxlength="4">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Age Group</label>
+        <select id="custom-age">
+          <option value="toddler">Ages 1–3</option>
+          <option value="elementary">Elementary</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Subject / Theme</label>
+        <input type="text" id="custom-subject" placeholder="e.g. numbers, colors, science">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Duration</label>
+        <input type="text" id="custom-duration" placeholder="e.g. 10 min">
+      </div>
+      <div class="form-group">
+        <label>Group Size</label>
+        <input type="text" id="custom-group" placeholder="e.g. Whole Class">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="custom-description" placeholder="Write a short description of the game..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Materials</label>
+      <input type="text" id="custom-materials" placeholder="paper, pencils, tape">
+    </div>
+
+    <div class="form-group">
+      <label>Steps</label>
+      <textarea id="custom-steps" placeholder="Write steps separated by commas. Example: Prepare cards, Divide students, Start the game"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Teacher Tip</label>
+      <input type="text" id="custom-tip" placeholder="One helpful tip for other teachers">
+    </div>
+
+    <button class="btn-create" onclick="createTeacherGame()">➕ Add My Game Idea</button>
+    <div id="share-message"></div>
+  </div>
+</section>
 
 <hr class="divider">
 
@@ -631,6 +777,99 @@ function renderGame(game) {
         </div>
         <button class="btn-save" onclick="saveGame()" id="save-btn">📌 Save this Game</button>
       </div>
+    </div>`;
+}
+
+function createTeacherGame() {
+  const title = document.getElementById('custom-title').value.trim();
+  const emoji = document.getElementById('custom-emoji').value.trim() || '🎲';
+  const age = document.getElementById('custom-age').value;
+  const subject = document.getElementById('custom-subject').value.trim() || 'teacher idea';
+  const duration = document.getElementById('custom-duration').value.trim() || '10 min';
+  const group = document.getElementById('custom-group').value.trim() || 'Any';
+  const description = document.getElementById('custom-description').value.trim();
+  const materialsText = document.getElementById('custom-materials').value.trim();
+  const stepsText = document.getElementById('custom-steps').value.trim();
+  const tip = document.getElementById('custom-tip').value.trim() || 'Adjust the difficulty based on your students.';
+
+  if (!title || !description || !materialsText || !stepsText) {
+    document.getElementById('share-message').innerHTML = '<div class="share-box">Please add a title, description, materials, and steps.</div>';
+    return;
+  }
+
+  const game = {
+    age,
+    title,
+    emoji,
+    subject,
+    duration,
+    group,
+    description,
+    materials: materialsText.split(',').map(item => item.trim()).filter(Boolean),
+    steps: stepsText.split(',').map(step => step.trim()).filter(Boolean),
+    tip,
+    teacherMade: true
+  };
+
+  currentAge = age;
+  currentGame = game;
+  savedGames.unshift(game);
+  if (savedGames.length > 20) savedGames = savedGames.slice(0, 20);
+  localStorage.setItem('playlearn_saved', JSON.stringify(savedGames));
+
+  document.querySelectorAll('.age-tab').forEach(t => t.className = 'age-tab');
+  document.getElementById(`tab-${age}`).className = `age-tab active-${age}`;
+  renderGame(game);
+  renderSaved();
+
+  document.getElementById('share-message').innerHTML = `
+    <div class="share-box">
+      ✅ Your game was added and saved!<br>
+      <button class="btn-share" onclick="copyShareText()">📤 Copy Share Message</button>
+    </div>`;
+}
+
+function copyShareText() {
+  if (!currentGame) return;
+
+  const shareText = [
+    'PlayLearn Game Idea',
+    '',
+    `${currentGame.emoji} ${currentGame.title}`,
+    `Age: ${currentGame.age === 'toddler' ? 'Ages 1–3' : 'Elementary'}`,
+    `Subject: ${currentGame.subject}`,
+    `Time: ${currentGame.duration}`,
+    `Group: ${currentGame.group}`,
+    '',
+    'Description:',
+    currentGame.description,
+    '',
+    'Materials:',
+    ...currentGame.materials.map(item => `- ${item}`),
+    '',
+    'Steps:',
+    ...currentGame.steps.map(step => `- ${step}`),
+    '',
+    'Teacher Tip:',
+    currentGame.tip
+  ].join('\n');
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(shareText).then(() => {
+      document.getElementById('share-message').innerHTML = '<div class="share-box">✅ Share message copied! You can paste it in Messenger, Facebook, email, or a teachers group.</div>';
+    }).catch(() => {
+      showManualCopyBox(shareText);
+    });
+  } else {
+    showManualCopyBox(shareText);
+  }
+}
+
+function showManualCopyBox(text) {
+  document.getElementById('share-message').innerHTML = `
+    <div class="share-box">
+      Copy this message and send it to other teachers:
+      <textarea style="width:100%; min-height:180px; margin-top:10px; padding:10px; border-radius:10px; border:2px solid #A78BFA;">${text}</textarea>
     </div>`;
 }
 
